@@ -1,0 +1,24 @@
+<article class="rounded-lg bg-white p-5 shadow-md">
+  <div class="flex items-start justify-between gap-3">
+    <h2 class="text-xl font-bold text-gray-900">{{ project().name }}</h2>
+    <span
+      class="rounded-full px-3 py-1 text-xs font-semibold"
+      [class]="badgeClass(project().status)"
+    >
+      {{ project().status }}
+    </span>
+  </div>
+
+  <p class="mt-2 text-gray-600">{{ project().description }}</p>
+
+  <h3 class="mb-2 mt-4 text-sm font-semibold uppercase text-gray-500">Tâches</h3>
+  <app-task-list [tasks]="project().tasks" />
+
+  <button
+    type="button"
+    (click)="selectProject()"
+    class="mt-5 rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+  >
+    Sélectionner
+  </button>
+</article>
