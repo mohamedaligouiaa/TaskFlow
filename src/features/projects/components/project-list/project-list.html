@@ -1,21 +1,63 @@
-<section class="mx-auto max-w-5xl p-6">
-  <h1 class="mb-6 text-3xl font-bold text-gray-900">Mes projets</h1>
+<div class="space-y-6">
+  <!-- Barre d'outils en verre -->
+  <div class="flex flex-col gap-3 rounded-2xl border border-white/60 bg-white/50 p-3 shadow-lg shadow-indigo-500/5 backdrop-blur-xl sm:flex-row sm:items-center">
+    <label class="relative flex-1">
+      <span class="sr-only">Rechercher un projet</span>
+      <svg class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+           viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.9 3.5l4.3 4.3a1 1 0 01-1.4 1.4l-4.3-4.3A6 6 0 012 8z"/>
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Rechercher un projet…"
+        class="w-full rounded-xl border border-white/70 bg-white/70 py-2.5 pl-10 pr-3 text-sm
+               placeholder:text-slate-400 outline-none transition
+               focus:border-indigo-400 focus:ring-4 focus:ring-indigo-400/20"
+      />
+    </label>
 
-  <input
-    type="text"
-    placeholder="Rechercher un projet..."
-    [(ngModel)]="searchTerm"
-    class="mb-6 w-full rounded border border-gray-300 bg-white px-4 py-2 focus:border-indigo-500 focus:outline-none"
-  />
+    <!-- Filtre segmenté -->
+    <div role="group" aria-label="Filtrer les tâches"
+         class="inline-flex rounded-xl border border-white/70 bg-white/60 p-1 text-sm">
+      @for (f of filters; track f.value) {
+        <button
+          type="button"
+          (click)="taskFilter.set(f.value)"
+          [attr.aria-pressed]="taskFilter() === f.value"
+          class="rounded-lg px-3 py-1.5 font-medium transition focus-visible:outline-none
+                 focus-visible:ring-2 focus-visible:ring-indigo-400"
+          [class]="taskFilter() === f.value
+            ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30'
+            : 'text-slate-600 hover:bg-white/80'">
+          {{ f.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <p class="px-1 text-sm text-slate-500" aria-live="polite">
+    {{ filteredProjects().length }} projet(s) affiché(s)
+  </p>
 
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     @for (project of filteredProjects(); track project.id) {
       <app-project-card
         [project]="project"
+        [users]="users()"
+        [showAssignee]="true"
+        [taskFilter]="taskFilter()"
         (projectSelected)="onProjectSelected($event)"
+        (taskStatusChange)="onTaskStatusChange($event)"
+        (taskDelete)="onTaskDelete($event)"
       />
     } @empty {
-      <p class="text-gray-500">Aucun projet trouvé.</p>
+      <div class="col-span-full rounded-2xl border border-dashed border-slate-300 bg-white/40 p-10 text-center text-slate-500 backdrop-blur">
+        <p class="text-3xl">🔍</p>
+        <p class="mt-2 font-medium">Aucun projet trouvé</p>
+        <p class="text-sm">Essayez un autre mot-clé.</p>
+      </div>
     }
   </div>
-</section>
+</div>

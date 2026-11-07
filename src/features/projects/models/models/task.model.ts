@@ -6,5 +6,7 @@ export interface Task {
   title: string;
   priority: TaskPriority;
   status: TaskStatus;
-  assigneeId?: number;   
+  assigneeId?: number;
+  dueDate?: string;
+  description?: string;
 }
